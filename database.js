@@ -1,8 +1,6 @@
 import * as SQLite from "expo-sqlite";
 
-export const openDatabase = async () => {
-    return await SQLite.openDatabaseAsync('calendar.db');
-}
+export const openDatabase = async () => { return await SQLite.openDatabaseAsync('calendar.db'); }
 
 export const createTable = async () => {
     const database = await openDatabase();
@@ -18,15 +16,11 @@ export const createTable = async () => {
             );
         `);
         console.log('Table created')
-    } catch (error) {
-        console.error("Error creating table:", error)
-    }
+    } catch (error) { console.error("Error creating table:", error) }
 }
 
 export const insertTask = async (user, date, title, description) => {
-    if (!user || !date || !title) {
-        return;
-    }
+    if (!user || !date || !title) { return;}
     const database = await openDatabase();
     try {
         const result = await database.runAsync(
@@ -39,7 +33,6 @@ export const insertTask = async (user, date, title, description) => {
     }
 }
 
-// всі задачі користувача на конкретний день
 export const fetchTasksByDate = async (user, date) => {
     const database = await openDatabase();
     try {
@@ -55,7 +48,6 @@ export const fetchTasksByDate = async (user, date) => {
     }
 };
 
-// дні, в яких є задачі (для крапок у календарі)
 export const fetchTaskDates = async (user, fromDate, toDate) => {
     const database = await openDatabase();
     try {
@@ -71,9 +63,7 @@ export const fetchTaskDates = async (user, fromDate, toDate) => {
 };
 
 export const updateTask = async (id, title, description) => {
-    if (!id || !title) {
-        return;
-    }
+    if (!id || !title) { return; }
     const database = await openDatabase();
     try {
         const res = await database.runAsync(
@@ -88,9 +78,7 @@ export const updateTask = async (id, title, description) => {
 
 export const deleteTask = async (id) => {
     const database = await openDatabase();
-    if (!id) {
-        return;
-    }
+    if (!id) { return; }
     try {
         const result = await database.runAsync('delete from tasks where id = ?', id);
         console.log('Task deleted:', result);
