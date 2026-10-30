@@ -3,28 +3,31 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-nativ
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 
-const LoginScreen = ({ navigation }) => {
+const RegisterScreen = ({ navigation }) => {
   const { colors } = useTheme();
-  const { login } = useAuth();
+  const { register } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     if (username.trim() === '' || password === '') {
       setError('Заповніть усі поля');
       return;
     }
-    const result = await login(username.trim(), password);
+    if (password !== password2) {
+      setError('Паролі не збігаються');
+      return;
+    }
+    const result = await register(username.trim(), password);
     if (result) {
       setError(result);
     }
   };
 
   const inputStyle = [
-    styles.input,
-    { backgroundColor: colors.input, color: colors.text, borderColor: colors.border },
-  ];
+    styles.input, { backgroundColor: colors.input, color: colors.text, borderColor: colors.border }, ];
 
   return (
     <View style={styles.container}>
@@ -42,15 +45,22 @@ const LoginScreen = ({ navigation }) => {
         value={password}
         onChangeText={setPassword}
         secureTextEntry/>
+      <TextInput
+        style={inputStyle}
+        placeholder="Повторіть пароль"
+        placeholderTextColor={colors.mutedText}
+        value={password2}
+        onChangeText={setPassword2}
+        secureTextEntry/>
 
       {error !== '' && <Text style={[styles.error, { color: colors.danger }]}>{error}</Text>}
 
-      <TouchableOpacity style={[styles.btn, { backgroundColor: colors.today }]} onPress={handleLogin}>
-        <Text style={styles.btnText}>Увійти</Text>
+      <TouchableOpacity style={[styles.btn, { backgroundColor: colors.today }]} onPress={handleRegister}>
+        <Text style={styles.btnText}>Зареєструватись</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-        <Text style={[styles.link, { color: colors.today }]}>Немає акаунта? Зареєструватись</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+        <Text style={[styles.link, { color: colors.today }]}>Вже є акаунт? Увійти</Text>
       </TouchableOpacity>
     </View>
   );
@@ -85,4 +95,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default RegisterScreen;
