@@ -1,88 +1,89 @@
 import * as SQLite from "expo-sqlite";
 
-export const openDatabase = async () => { return await SQLite.openDatabaseAsync('calendar.db'); }
+export const openDatabase = async () => { return await SQLite.openDatabaseAsync('violations.db'); }
 
 export const createTable = async () => {
     const database = await openDatabase();
     try {
         await database.execAsync(`
             PRAGMA journal_mode = WAL;
-            create table if not exists tasks(
+            create table if not exists violations(
                 id integer primary key autoincrement,
-                user text not null,
+                description text not null,
+                image blob,
                 date text not null,
-                title text not null,
-                description text
+                userId text not null,
+                latitude real,
+                longitude real,
+                synced integer default 0
             );
         `);
         console.log('Table created')
     } catch (error) { console.error("Error creating table:", error) }
 }
 
-export const insertTask = async (user, date, title, description) => {
-    if (!user || !date || !title) { return;}
+export const insertViolation = async (description, image, date, userId, latitude, longitude) => {
+    if (!description || !date || !userId) { return null; }
     const database = await openDatabase();
     try {
         const result = await database.runAsync(
-            'insert into tasks (user, date, title, description) values (?, ?, ?, ?)',
-            user, date, title, description
+            'insert into violations (description, image, date, userId, latitude, longitude) values (?, ?, ?, ?, ?, ?)',
+            description, image, date, userId, latitude, longitude
         );
-        console.log('Task inserted with id:', result.lastInsertRowId);
+        console.log('Violation inserted with id:', result.lastInsertRowId);
+        return result.lastInsertRowId;
     } catch (error) {
-        console.error('Error insert task:', error);
+        console.error('Error insert violation:', error);
+        return null;
     }
 }
 
-export const fetchTasksByDate = async (user, date) => {
+export const fetchViolationsByDate = async (date) => {
     const database = await openDatabase();
     try {
         const allRows = await database.getAllAsync(
-            'select * from tasks where user = ? and date = ? order by id',
-            user, date
+            'select * from violations where date = ? order by id',
+            date
         );
-        console.log('All Tasks:', allRows);
+        console.log('All Violations:', allRows);
         return allRows;
     } catch (error) {
-        console.error('Error fetching tasks:', error)
+        console.error('Error fetching violations:', error)
         return [];
     }
 };
 
-export const fetchTaskDates = async (user, fromDate, toDate) => {
+export const fetchViolationDates = async (fromDate, toDate) => {
     const database = await openDatabase();
     try {
         const rows = await database.getAllAsync(
-            'select distinct date from tasks where user = ? and date >= ? and date <= ?',
-            user, fromDate, toDate
+            'select distinct date from violations where date >= ? and date <= ?',
+            fromDate, toDate
         );
         return rows.map((row) => row.date);
     } catch (error) {
-        console.error('Error fetching task dates:', error)
+        console.error('Error fetching violation dates:', error)
         return [];
     }
 };
 
-export const updateTask = async (id, title, description) => {
-    if (!id || !title) { return; }
+export const fetchUnsyncedViolations = async () => {
     const database = await openDatabase();
     try {
-        const res = await database.runAsync(
-            'update tasks set title = ?, description = ? where id = ?',
-            title, description, id
-        )
-        console.log('Task updated: ', res);
+        return await database.getAllAsync('select * from violations where synced = 0');
     } catch (error) {
-        console.error('Error updating task: ', error)
+        console.error('Error fetching unsynced violations:', error)
+        return [];
     }
-}
+};
 
-export const deleteTask = async (id) => {
-    const database = await openDatabase();
+export const markAsSynced = async (id) => {
     if (!id) { return; }
+    const database = await openDatabase();
     try {
-        const result = await database.runAsync('delete from tasks where id = ?', id);
-        console.log('Task deleted:', result);
+        await database.runAsync('update violations set synced = 1 where id = ?', id);
+        console.log('Violation marked as synced:', id);
     } catch (error) {
-        console.error('Error deleting task: ', error)
+        console.error('Error marking as synced:', error)
     }
 }

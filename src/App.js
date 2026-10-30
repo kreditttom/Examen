@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { createTable } from './database';
 import DrawerNavigator from './navigation/DrawerNavigator';
 
+
 function Root() {
     const { colors } = useTheme();
     const { loading } = useAuth();
