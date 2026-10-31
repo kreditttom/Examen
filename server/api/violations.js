@@ -19,3 +19,9 @@ export const fetchDatesRequest = (from, to) => {
 export const fetchByDateRequest = (date) => {
     return sendGet('/violations/by-date?date=' + date);
 };
+export const fetchLocationsRequest = () => {
+    return sendGet('/violations/locations');
+};
+export const fetchByLocationRequest = (lat, lng) => {
+    return sendGet('/violations/by-location?lat=' + lat + '&lng=' + lng);
+};

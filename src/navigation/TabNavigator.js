@@ -43,7 +43,8 @@ export default function TabNavigator() {
                 name="Map"
                 component={MapScreen}
                 options={{
-                    title: '-'
+                    title: 'Мапа правопорушень',
+                    tabBarIcon: ({ color, size }) => <Ionicons name="map" size={size} color={color} />,
                 }}
             />
             {user && (
