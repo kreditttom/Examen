@@ -6,16 +6,16 @@ import { useAuth } from '../context/AuthContext';
 const LoginScreen = ({ navigation }) => {
   const { colors } = useTheme();
   const { login } = useAuth();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const handleLogin = async () => {
-    if (username.trim() === '' || password === '') {
+    if (email.trim() === '' || password === '') {
       setError('Заповніть усі поля');
       return;
     }
-    const result = await login(username.trim(), password);
+    const result = await login(email.trim().toLowerCase(), password);
     if (result) {
       setError(result);
     }
@@ -29,19 +29,20 @@ const LoginScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <TextInput
-        style={inputStyle}
-        placeholder="Логін"
-        placeholderTextColor={colors.mutedText}
-        value={username}
-        onChangeText={setUsername}
-        autoCapitalize="none"/>
+          style={inputStyle}
+          placeholder="Email"
+          placeholderTextColor={colors.mutedText}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"/>
       <TextInput
-        style={inputStyle}
-        placeholder="Пароль"
-        placeholderTextColor={colors.mutedText}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry/>
+          style={inputStyle}
+          placeholder="Пароль"
+          placeholderTextColor={colors.mutedText}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry/>
 
       {error !== '' && <Text style={[styles.error, { color: colors.danger }]}>{error}</Text>}
 

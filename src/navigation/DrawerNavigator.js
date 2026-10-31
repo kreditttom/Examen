@@ -21,7 +21,9 @@ function CustomDrawerContent(props) {
     return (
         <DrawerContentScrollView {...props}>
             {user && (
-                <Text style={[styles.user, { color: colors.text }]}>Користувач: {user}</Text>
+                <Text style={[styles.user, { color: colors.text }]}>
+                    {user.firstName} {user.lastName}
+                </Text>
             )}
 
             <DrawerItemList {...props} />
@@ -55,15 +57,12 @@ export default function DrawerNavigator() {
                 drawerStyle: { backgroundColor: colors.background },
                 drawerActiveTintColor: colors.today,
                 drawerInactiveTintColor: colors.text,
-                sceneStyle: { backgroundColor: colors.background },
-            }}>
+                sceneStyle: { backgroundColor: colors.background },}}>
             <Drawer.Screen
                 name="Home"
                 component={HomeStack}
-                options={{ title: 'Головна', headerShown: false }}
-            />
+                options={{ title: 'Головна', headerShown: false }}/>
 
-            {/* Ці пункти бачить тільки незареєстрований користувач */}
             {!user && (
                 <Drawer.Screen name="SignIn" component={LoginScreen} options={{ title: 'Увійти' }} />
             )}

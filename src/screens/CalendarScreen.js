@@ -1,20 +1,33 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import Header from '../components/header';
-import Day from '../components/Day';
+import Day from '../components/day';
 import { MONTHS, WEEK_DAYS } from '../utils/calendar';
 import { buildGrid, toDateKey } from '../utils/date';
+import { fetchDatesRequest } from '../../server/api/violations';
 import { useTheme } from '../context/ThemeContext';
+
 
 const CalendarScreen = ({ navigation }) => {
   const { colors } = useTheme();
   const today = new Date();
   const [date, setDate] = useState({ year: today.getFullYear(), month: today.getMonth() });
 
-  // тимчасово порожній масив
   const [violationDates, setViolationDates] = useState([]);
 
   const days = buildGrid(date.year, date.month);
+
+  useFocusEffect(
+      useCallback(() => {
+        const first = days[0];
+        const last = days[days.length - 1];
+        const from = toDateKey(first.year, first.month, first.day);
+        const to = toDateKey(last.year, last.month, last.day);
+
+        fetchDatesRequest(from, to).then((result) => {if (result.data) { setViolationDates(result.data);} });
+      }, [date])
+  );
 
   const goToday = () => {
     setDate({ year: today.getFullYear(), month: today.getMonth() });

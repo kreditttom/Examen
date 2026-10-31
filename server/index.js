@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 require('./db');
 const authRoutes = require('./routes/auth');
+const violationRoutes = require('./routes/violations');
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/violations', violationRoutes);
 
 const PORT = process.env.PORT || 3000;
 // '0.0.0.0' щоб телефон у тій же Wi-Fi мережі міг достукатись - ШІ
