@@ -66,9 +66,18 @@ const MapScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1 },
-    map: { flex: 1 },
-    panel: { height: 220, padding: 12 },
+    container: {
+        flex: 1
+    },
+    map: {
+        flex: 1
+    },
+    panel: {
+        height: 250,
+        padding: 14,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+    },
 });
 
 export default MapScreen;

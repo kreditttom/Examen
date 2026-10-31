@@ -27,53 +27,65 @@ const LoginScreen = ({ navigation }) => {
   ];
 
   return (
-    <View style={styles.container}>
-      <TextInput
-          style={inputStyle}
-          placeholder="Email"
-          placeholderTextColor={colors.mutedText}
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"/>
-      <TextInput
-          style={inputStyle}
-          placeholder="Пароль"
-          placeholderTextColor={colors.mutedText}
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry/>
+      <View style={styles.container}>
+        <Text style={[styles.title, { color: colors.text }]}>Вхід</Text>
 
-      {error !== '' && <Text style={[styles.error, { color: colors.danger }]}>{error}</Text>}
+        <TextInput
+            style={inputStyle}
+            placeholder="Email"
+            placeholderTextColor={colors.mutedText}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"/>
+        <TextInput
+            style={inputStyle}
+            placeholder="Пароль"
+            placeholderTextColor={colors.mutedText}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry/>
 
-      <TouchableOpacity style={[styles.btn, { backgroundColor: colors.today }]} onPress={handleLogin}>
-        <Text style={styles.btnText}>Увійти</Text>
-      </TouchableOpacity>
+        {error !== '' && <Text style={[styles.error, { color: colors.danger }]}>{error}</Text>}
 
-      <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-        <Text style={[styles.link, { color: colors.today }]}>Немає акаунта? Зареєструватись</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity style={[styles.btn, { backgroundColor: colors.today }]} onPress={handleLogin}>
+          <Text style={styles.btnText}>Увійти</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+          <Text style={[styles.link, { color: colors.today }]}>Немає акаунта? Зареєструватись</Text>
+        </TouchableOpacity>
+      </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 24,
     justifyContent: 'center',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 24,
   },
   input: {
     borderWidth: 1,
-    padding: 10,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 16,
     marginBottom: 12,
   },
   error: {
     marginBottom: 12,
   },
   btn: {
-    padding: 14,
+    paddingVertical: 14,
+    borderRadius: 12,
     alignItems: 'center',
+    marginTop: 4,
   },
   btnText: {
     color: '#ffffff',
@@ -82,7 +94,7 @@ const styles = StyleSheet.create({
   },
   link: {
     textAlign: 'center',
-    marginTop: 16,
+    marginTop: 18,
   },
 });
 

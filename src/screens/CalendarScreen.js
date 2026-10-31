@@ -52,7 +52,7 @@ const CalendarScreen = ({ navigation }) => {
 
   return (
       <View style={styles.container}>
-        <View style={{ backgroundColor: colors.card }}>
+        <View style={[styles.card, { backgroundColor: colors.card, shadowColor: colors.shadow }]}>
           <Header
               monthName={MONTHS[date.month]}
               year={date.year}
@@ -107,6 +107,14 @@ const styles = StyleSheet.create({
     padding: 12,
     textAlign: 'center',
     fontWeight: '600',
+  },
+  card: {
+    borderRadius: 16,
+    padding: 12,
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 3,
   },
 });
 

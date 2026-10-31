@@ -40,6 +40,7 @@ const RegisterScreen = ({ navigation }) => {
       <ScrollView
           contentContainerStyle={styles.container}
           keyboardShouldPersistTaps="handled">
+        <Text style={[styles.title, { color: colors.text }]}>Реєстрація</Text>
         <TextInput
             style={inputStyle}
             placeholder="Ім'я"
@@ -91,20 +92,30 @@ const RegisterScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    padding: 20,
+    padding: 24,
     justifyContent: 'center',
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 24,
   },
   input: {
     borderWidth: 1,
-    padding: 10,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 16,
     marginBottom: 12,
   },
   error: {
     marginBottom: 12,
   },
   btn: {
-    padding: 14,
+    paddingVertical: 14,
+    borderRadius: 12,
     alignItems: 'center',
+    marginTop: 4,
   },
   btnText: {
     color: '#ffffff',
@@ -113,8 +124,9 @@ const styles = StyleSheet.create({
   },
   link: {
     textAlign: 'center',
-    marginTop: 16,
+    marginTop: 18,
   },
 });
+
 
 export default RegisterScreen;

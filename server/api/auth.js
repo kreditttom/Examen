@@ -12,7 +12,7 @@ const sendPost = async (path, body) => {
         if (!response.ok) { return { error: data.message || 'Помилка сервера' }; }
         return { data };
     } catch (error) {
-        console.error('Network error:', error);
+        console.log('Network error:', error);
         return { error: 'Немає зв\'язку з сервером' };
     }
 };

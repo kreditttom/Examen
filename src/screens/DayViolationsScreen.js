@@ -6,6 +6,7 @@ import { fetchByDateRequest } from '../../server/api/violations';
 import { formatDateKey } from '../utils/date';
 import { useTheme } from '../context/ThemeContext';
 import { fetchUnsyncedByDate } from '../database';
+import { Ionicons } from '@expo/vector-icons';
 
 const DayViolationsScreen = ({ route }) => {
     const { date } = route.params;
@@ -55,9 +56,12 @@ const DayViolationsScreen = ({ route }) => {
             {error !== '' && <Text style={[styles.error, { color: colors.danger }]}>{error}</Text>}
 
             {violations.length === 0 && error === '' ? (
-                <Text style={[styles.empty, { color: colors.mutedText }]}>
-                    На цей день правопорушень немає
-                </Text>
+                <View style={styles.emptyBox}>
+                    <Ionicons name="checkmark-circle-outline" size={64} color={colors.mutedText} />
+                    <Text style={[styles.empty, { color: colors.mutedText }]}>
+                        На цей день правопорушень немає
+                    </Text>
+                </View>
             ) : (
                 <FlatList
                     data={violations}
@@ -69,11 +73,31 @@ const DayViolationsScreen = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 20 },
-    center: { flex: 1, justifyContent: 'center' },
-    title: { fontSize: 20, fontWeight: 'bold', marginBottom: 16 },
-    error: { marginBottom: 12 },
-    empty: { fontSize: 16, textAlign: 'center', marginTop: 40 },
+    container: {
+        flex: 1,
+        padding: 20
+    },
+    center: {
+        flex: 1,
+        justifyContent: 'center'
+    },
+    title: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        marginBottom: 16
+    },
+    error: {
+        marginBottom: 12
+    },
+    emptyBox: {
+        alignItems: 'center',
+        marginTop: 60
+    },
+    empty: {
+        fontSize: 16,
+        textAlign: 'center',
+        marginTop: 12
+    },
 });
 
 export default DayViolationsScreen;

@@ -15,7 +15,7 @@ export const uploadPhoto = async (dataUri) => {
         if (!response.ok) { return { error: (data.error && data.error.message) || 'Помилка Cloudinary' };}
         return { data: data.secure_url };
     } catch (error) {
-        console.error('Cloudinary error:', error);
+        console.log('Cloudinary error:', error);
         return { error: 'Немає зв\'язку з Cloudinary' };
     }
 };

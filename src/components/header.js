@@ -7,15 +7,15 @@ function Header({ monthName, year, onPrev, onNext, onToday }) {
     return (
         <View style={styles.header}>
             <TouchableOpacity onPress={onPrev} style={styles.navBtn}>
-                <Text style={[styles.navBtnText, { backgroundColor: colors.accent, color: colors.text }]}>{'<'}</Text>
+                <Text style={[styles.navBtnText, { color: colors.today }]}>{'<'}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={onToday}>
-                <Text style={[styles.headerTitle, { backgroundColor: colors.accent, color: colors.text }]}>
+                <Text style={[styles.headerTitle, { color: colors.text }]}>
                     {monthName} {year}
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={onNext} style={styles.navBtn}>
-                <Text style={[styles.navBtnText, { backgroundColor: colors.accent, color: colors.text }]}>{'>'}</Text>
+                <Text style={[styles.navBtnText, { color: colors.today }]}>{'>'}</Text>
             </TouchableOpacity>
         </View>
     );
@@ -24,7 +24,7 @@ function Header({ monthName, year, onPrev, onNext, onToday }) {
 const styles = StyleSheet.create({
     header: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 12,
     },
@@ -33,10 +33,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     navBtn: {
-        padding: 8,
+        paddingHorizontal: 20,
+        paddingVertical: 8,
     },
     navBtnText: {
-        fontSize: 18,
+        fontSize: 22,
+        fontWeight: 'bold',
     },
 });
 

@@ -105,8 +105,8 @@ const AddViolationScreen = () => {
                     <TouchableOpacity style={[styles.btn, { backgroundColor: colors.danger }]} onPress={() => setShowCamera(false)}>
                         <Text style={styles.btnText}>Скасувати</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.btn, { backgroundColor: colors.today }]} onPress={takePhoto}>
-                        <Text style={styles.btnText}>Зробити фото</Text>
+                    <TouchableOpacity style={[styles.btn, { backgroundColor: 'transparent', borderWidth: 1, borderColor: colors.today, marginBottom: 4 }]} onPress={takePhoto}>
+                        <Text style={[styles.btnText, { color: colors.today }]}>Зробити фото</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -131,10 +131,6 @@ const AddViolationScreen = () => {
                 placeholder="Що сталося?"
                 placeholderTextColor={colors.mutedText}
                 multiline/>
-
-            <Text style={{ color: colors.mutedText, marginBottom: 12 }}>
-                Дата, час і геолокація додадуться автоматично
-            </Text>
 
             <TouchableOpacity
                 style={[styles.btn, { backgroundColor: colors.today, opacity: saving ? 0.5 : 1 }]}
@@ -163,10 +159,12 @@ const styles = StyleSheet.create({
         right: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
+        gap: 12,
     },
     photo: {
         width: '100%',
         height: 250,
+        borderRadius: 14,
         marginBottom: 12
     },
     label: {
@@ -177,15 +175,20 @@ const styles = StyleSheet.create({
     },
     input: {
         borderWidth: 1,
-        padding: 10,
+        borderRadius: 12,
+        paddingHorizontal: 14,
+        paddingVertical: 12,
+        fontSize: 16,
         marginBottom: 12
     },
     multiline: {
-        height: 100,
+        height: 110,
         textAlignVertical: 'top'
     },
     btn: {
-        padding: 14,
+        paddingVertical: 14,
+        paddingHorizontal: 20,
+        borderRadius: 12,
         alignItems: 'center'
     },
     btnText: {

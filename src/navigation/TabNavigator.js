@@ -1,4 +1,4 @@
-import { TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DrawerActions } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,12 +7,14 @@ import MapScreen from '../screens/MapScreen';
 import AddViolationScreen from '../screens/AddViolationScreen';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
+import useOnline from '../hooks/useOnline';
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
     const { colors } = useTheme();
     const { user } = useAuth();
+    const online = useOnline();
 
     return (
         <Tab.Navigator
@@ -29,6 +31,22 @@ export default function TabNavigator() {
                         onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
                         <Ionicons name="menu" size={26} color={colors.text} />
                     </TouchableOpacity>
+                ),
+                headerRight: () => (
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginRight: 15 }}>
+                        <View
+                            style={{
+                                width: 10,
+                                height: 10,
+                                borderRadius: 5,
+                                marginRight: 6,
+                                backgroundColor: online ? colors.success : colors.danger,
+                            }}
+                        />
+                        <Text style={{ color: '#ffffff', fontSize: 14 }}>
+                            {online ? 'Онлайн' : 'Офлайн'}
+                        </Text>
+                    </View>
                 ),
             })}>
             <Tab.Screen

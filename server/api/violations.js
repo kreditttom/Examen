@@ -8,7 +8,7 @@ const sendGet = async (path) => {
         if (!response.ok) { return { error: data.message || 'Помилка сервера' }; }
         return { data };
     } catch (error) {
-        console.error('Network error:', error);
+        console.log('Network error:', error);
         return { error: 'Немає зв\'язку з сервером' };
     }
 };
@@ -42,7 +42,7 @@ export const sendViolationRequest = async (token, body) => {
 
         return { data };
     } catch (error) {
-        console.error('Network error:', error);
+        console.log('Network error:', error);
         return { error: 'Немає зв\'язку з сервером' };
     }
 };
