@@ -67,13 +67,13 @@ router.get('/by-location', (req, res) => {
 // POST /api/violations
 // тільки для залогінених
 router.post('/', checkAuth, (req, res) => {
-    const { description, url, date, latitude, longitude } = req.body;
+    const { description, url, date, time, latitude, longitude } = req.body;
 
     if (!description || !date) { return res.status(400).json({ message: 'Потрібні опис і дата' });}
 
     const result = db
-        .prepare('insert into violations (description, url, date, userId, latitude, longitude) values (?, ?, ?, ?, ?, ?)')
-        .run(description, url || null, date, req.userId, latitude ?? null, longitude ?? null);
+        .prepare('insert into violations (description, url, date, time, userId, latitude, longitude) values (?, ?, ?, ?, ?, ?, ?)')
+        .run(description, url || null, date, time || null, req.userId, latitude ?? null, longitude ?? null);
 
     res.status(201).json({ id: result.lastInsertRowid });
 });

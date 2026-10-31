@@ -7,6 +7,7 @@ import { MONTHS, WEEK_DAYS } from '../utils/calendar';
 import { buildGrid, toDateKey } from '../utils/date';
 import { fetchDatesRequest } from '../../server/api/violations';
 import { useTheme } from '../context/ThemeContext';
+import { fetchUnsyncedDates } from '../database';
 
 
 const CalendarScreen = ({ navigation }) => {
@@ -25,7 +26,13 @@ const CalendarScreen = ({ navigation }) => {
         const from = toDateKey(first.year, first.month, first.day);
         const to = toDateKey(last.year, last.month, last.day);
 
-        fetchDatesRequest(from, to).then((result) => {if (result.data) { setViolationDates(result.data);} });
+        const load = async () => {
+          const local = await fetchUnsyncedDates(from, to);
+          const result = await fetchDatesRequest(from, to);
+          const server = result.data ? result.data : [];
+          setViolationDates([...new Set([...server, ...local])]);
+        };
+        load();
       }, [date])
   );
 

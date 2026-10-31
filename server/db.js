@@ -23,6 +23,10 @@ db.exec(`
   );
 `);
 
+try {
+    db.exec('alter table violations add column time text');
+} catch (error) {}
+
 console.log('Database ready');
 
 module.exports = db;

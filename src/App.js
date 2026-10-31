@@ -6,6 +6,7 @@ import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { createTable } from './database';
 import DrawerNavigator from './navigation/DrawerNavigator';
+import SyncManager from './components/SyncManager';
 
 
 function Root() {
@@ -27,6 +28,7 @@ function Root() {
 
     return (
         <NavigationContainer>
+            <SyncManager />
             <DrawerNavigator />
         </NavigationContainer>
     );

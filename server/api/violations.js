@@ -25,3 +25,24 @@ export const fetchLocationsRequest = () => {
 export const fetchByLocationRequest = (lat, lng) => {
     return sendGet('/violations/by-location?lat=' + lat + '&lng=' + lng);
 };
+
+export const sendViolationRequest = async (token, body) => {
+    try {
+        const response = await fetch(API_URL + '/violations', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + token,
+            },
+            body: JSON.stringify(body),
+        });
+        const data = await response.json();
+
+        if (!response.ok) { return { error: data.message || 'Помилка сервера' };}
+
+        return { data };
+    } catch (error) {
+        console.error('Network error:', error);
+        return { error: 'Немає зв\'язку з сервером' };
+    }
+};

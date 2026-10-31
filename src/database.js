@@ -18,18 +18,24 @@ export const createTable = async () => {
                 synced integer default 0
             );
         `);
+        try {
+            await database.execAsync('alter table violations add column time text');
+        } catch (e) {}
+
         console.log('Table created')
+
     } catch (error) { console.error("Error creating table:", error) }
 }
 
-export const insertViolation = async (description, image, date, userId, latitude, longitude) => {
+export const insertViolation = async (description, image, date, time, userId, latitude, longitude) => {
     if (!description || !date || !userId) { return null; }
     const database = await openDatabase();
     try {
         const result = await database.runAsync(
-            'insert into violations (description, image, date, userId, latitude, longitude) values (?, ?, ?, ?, ?, ?)',
-            description, image, date, userId, latitude, longitude
+            'insert into violations (description, image, date, time, userId, latitude, longitude) values (?, ?, ?, ?, ?, ?, ?)',
+            description, image, date, time, userId, latitude, longitude
         );
+
         console.log('Violation inserted with id:', result.lastInsertRowId);
         return result.lastInsertRowId;
     } catch (error) {
@@ -67,10 +73,13 @@ export const fetchViolationDates = async (fromDate, toDate) => {
     }
 };
 
-export const fetchUnsyncedViolations = async () => {
+export const fetchUnsyncedViolations = async (userId) => {
     const database = await openDatabase();
     try {
-        return await database.getAllAsync('select * from violations where synced = 0');
+        return await database.getAllAsync(
+            'select * from violations where synced = 0 and userId = ?',
+            String(userId)
+        );
     } catch (error) {
         console.error('Error fetching unsynced violations:', error)
         return [];
@@ -87,3 +96,33 @@ export const markAsSynced = async (id) => {
         console.error('Error marking as synced:', error)
     }
 }
+
+
+// дні з невідправлені правопорушення (для крапок в офлайні)
+export const fetchUnsyncedDates = async (fromDate, toDate) => {
+    const database = await openDatabase();
+    try {
+        const rows = await database.getAllAsync(
+            'select distinct date from violations where synced = 0 and date >= ? and date <= ?',
+            fromDate, toDate
+        );
+        return rows.map((row) => row.date);
+    } catch (error) {
+        console.error('Error fetching unsynced dates:', error)
+        return [];
+    }
+};
+
+// невідправлені правопорушення за один день
+export const fetchUnsyncedByDate = async (date) => {
+    const database = await openDatabase();
+    try {
+        return await database.getAllAsync(
+            'select * from violations where synced = 0 and date = ? order by id',
+            date
+        );
+    } catch (error) {
+        console.error('Error fetching unsynced by date:', error)
+        return [];
+    }
+};

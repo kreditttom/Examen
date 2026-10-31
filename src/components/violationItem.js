@@ -1,19 +1,29 @@
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 
-function ViolationItem({ violation, onPress }) {
+function ViolationItem({ violation, onPress = () => {} }) {
     const { colors } = useTheme();
 
     return (
         <TouchableOpacity
             style={[styles.item, { backgroundColor: colors.card, borderColor: colors.border }]}
             onPress={onPress}>
+            {violation.url && <Image source={{ uri: violation.url }} style={styles.photo} />}
+
             <Text style={[styles.title, { color: colors.text }]} numberOfLines={2}>
                 {violation.description}
             </Text>
             <Text style={[styles.author, { color: colors.mutedText }]}>
                 {violation.firstName} {violation.lastName}
             </Text>
+
+            {violation.time && (
+                <Text style={[styles.author, { color: colors.mutedText }]}>{violation.time}</Text>
+            )}
+
+            {violation.pending && (
+                <Text style={[styles.author, { color: colors.danger }]}>Не відправлено на сервер</Text>
+            )}
         </TouchableOpacity>
     );
 }
@@ -23,6 +33,12 @@ const styles = StyleSheet.create({
         padding: 14,
         borderWidth: 1,
         borderRadius: 8,
+        marginBottom: 8,
+    },
+    photo: {
+        width: '100%',
+        height: 160,
+        borderRadius: 6,
         marginBottom: 8,
     },
     title: {

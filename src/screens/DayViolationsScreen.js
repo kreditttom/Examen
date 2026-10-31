@@ -5,6 +5,7 @@ import ViolationItem from '../components/violationItem';
 import { fetchByDateRequest } from '../../server/api/violations';
 import { formatDateKey } from '../utils/date';
 import { useTheme } from '../context/ThemeContext';
+import { fetchUnsyncedByDate } from '../database';
 
 const DayViolationsScreen = ({ route }) => {
     const { date } = route.params;
@@ -15,15 +16,27 @@ const DayViolationsScreen = ({ route }) => {
 
     useFocusEffect(
         useCallback(() => {
-            setLoading(true);
-            fetchByDateRequest(date).then((result) => {
-                if (result.error) { setError(result.error);}
-                else {
+            const load = async () => {
+                setLoading(true);
+                const localRows = await fetchUnsyncedByDate(date);
+
+                const local = localRows.map((row) => ({
+                    ...row,
+                    firstName: 'Ви',
+                    lastName: '',
+                    pending: true,
+                }));
+
+                const result = await fetchByDateRequest(date);
+                if (result.error) {
+                    setError(result.error);
+                    setViolations(local);
+                } else {
                     setError('');
-                    setViolations(result.data);
-                }
-                setLoading(false);
-            });
+                    setViolations([...result.data, ...local]);
+                }setLoading(false);
+            };
+            load();
         }, [date])
     );
 
@@ -48,7 +61,7 @@ const DayViolationsScreen = ({ route }) => {
             ) : (
                 <FlatList
                     data={violations}
-                    keyExtractor={(item) => String(item.id)}
+                    keyExtractor={(item) => (item.pending ? 'local-' : 'server-') + item.id}
                     renderItem={({ item }) => <ViolationItem violation={item} />}/>
             )}
         </View>
